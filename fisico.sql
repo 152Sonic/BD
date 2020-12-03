@@ -15,54 +15,14 @@ CREATE SCHEMA IF NOT EXISTS `Escola` DEFAULT CHARACTER SET utf8 ;
 USE `Escola` ;
 
 -- -----------------------------------------------------
--- Table `Escola`.`Docente`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Escola`.`Docente` (
-  `idDocente` INT NOT NULL,
-  `nr_de_Contribuinte` VARCHAR(45) NOT NULL,
-  `nome` VARCHAR(45) NOT NULL,
-  `Escola` INT NULL,
-  PRIMARY KEY (`idDocente`),
-  INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
-  CONSTRAINT `Escola`
-    FOREIGN KEY (`Escola`)
-    REFERENCES `Escola`.`Escola` (`idEscola`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
 -- Table `Escola`.`Escola`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Escola`.`Escola` (
   `idEscola` INT NOT NULL,
   `Rua` VARCHAR(45) NULL,
-  `Codigo_Postal` VARCHAR(45) NULL,
+  `Codigo_Postal` INT NULL,
   `telemovel` INT NULL,
-  `Nome` VARCHAR(45) NOT NULL,
-  `Aluno` INT NULL,
-  `Turma` INT NULL,
-  `Docente` INT NULL,
-  PRIMARY KEY (`idEscola`),
-  INDEX `Aluno_idx` (`Aluno` ASC) VISIBLE,
-  INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
-  INDEX `Docente_idx` (`Docente` ASC) VISIBLE,
-  CONSTRAINT `Aluno`
-    FOREIGN KEY (`Aluno`)
-    REFERENCES `Escola`.`Aluno` (`idAluno`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `Turma`
-    FOREIGN KEY (`Turma`)
-    REFERENCES `Escola`.`Turma` (`idTurma`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `Docente`
-    FOREIGN KEY (`Docente`)
-    REFERENCES `Escola`.`Docente` (`idDocente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`idEscola`))
 ENGINE = InnoDB;
 
 
@@ -73,16 +33,9 @@ CREATE TABLE IF NOT EXISTS `Escola`.`Turma` (
   `idTurma` INT NOT NULL,
   `N_Alunos` INT NOT NULL,
   `Diretor_de_Turma` VARCHAR(45) NOT NULL,
-  `Aluno` INT NULL,
   `Escola` INT NULL,
   PRIMARY KEY (`idTurma`),
-  INDEX `Aluno_idx` (`Aluno` ASC) VISIBLE,
   INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
-  CONSTRAINT `Aluno`
-    FOREIGN KEY (`Aluno`)
-    REFERENCES `Escola`.`Aluno` (`idAluno`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `Escola`
     FOREIGN KEY (`Escola`)
     REFERENCES `Escola`.`Escola` (`idEscola`)
@@ -103,8 +56,8 @@ CREATE TABLE IF NOT EXISTS `Escola`.`Aluno` (
   `Turma` INT NULL,
   `Escola` INT NULL,
   PRIMARY KEY (`idAluno`),
-  INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
   INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
+  INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
   CONSTRAINT `Turma`
     FOREIGN KEY (`Turma`)
     REFERENCES `Escola`.`Turma` (`idTurma`)
@@ -119,21 +72,39 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Escola`.`Ensina`
+-- Table `Escola`.`Docente`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Escola`.`Ensina` (
-  `Docente` INT NOT NULL,
-  `Turma` INT NOT NULL,
+CREATE TABLE IF NOT EXISTS `Escola`.`Docente` (
+  `idDocente` INT NOT NULL,
+  `nr_de_Contribuinte` VARCHAR(45) NOT NULL,
+  `nome` VARCHAR(45) NOT NULL,
+  `Escola` INT NULL,
+  PRIMARY KEY (`idDocente`),
+  INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
+  CONSTRAINT `Escola`
+    FOREIGN KEY (`Escola`)
+    REFERENCES `Escola`.`Escola` (`idEscola`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Escola`.`ensina`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Escola`.`ensina` (
+  `Turma` INT NULL,
+  `Docente` INT NULL,
   INDEX `Docente_idx` (`Docente` ASC) VISIBLE,
   INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
-  CONSTRAINT `Docente`
-    FOREIGN KEY (`Docente`)
-    REFERENCES `Escola`.`Docente` (`idDocente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
   CONSTRAINT `Turma`
     FOREIGN KEY (`Turma`)
     REFERENCES `Escola`.`Turma` (`idTurma`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Docente`
+    FOREIGN KEY (`Docente`)
+    REFERENCES `Escola`.`Docente` (`idDocente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
