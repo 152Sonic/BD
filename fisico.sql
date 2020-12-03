@@ -51,7 +51,6 @@ CREATE TABLE IF NOT EXISTS `Escola`.`Aluno` (
   `idAluno` INT NOT NULL,
   `nome` VARCHAR(45) NOT NULL,
   `idade` INT NOT NULL,
-  `media` DECIMAL(3,1) NULL,
   `email` VARCHAR(45) NULL,
   `Turma` INT NULL,
   `Escola` INT NULL,
@@ -90,11 +89,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Escola`.`ensina`
+-- Table `Escola`.`Ensina`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Escola`.`ensina` (
-  `Turma` INT NULL,
-  `Docente` INT NULL,
+CREATE TABLE IF NOT EXISTS `Escola`.`Ensina` (
+  `Turma` INT NOT NULL,
+  `Docente` INT NOT NULL,
   INDEX `Docente_idx` (`Docente` ASC) VISIBLE,
   INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
   CONSTRAINT `Turma`
@@ -105,6 +104,38 @@ CREATE TABLE IF NOT EXISTS `Escola`.`ensina` (
   CONSTRAINT `Docente`
     FOREIGN KEY (`Docente`)
     REFERENCES `Escola`.`Docente` (`idDocente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Escola`.`Disciplina`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Escola`.`Disciplina` (
+  `idDisciplina` INT NOT NULL,
+  `Nome` VARCHAR(45) NOT NULL,
+  PRIMARY KEY (`idDisciplina`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `Escola`.`Aprende`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Escola`.`Aprende` (
+  `Disciplina` INT NOT NULL,
+  `Aluno` INT NOT NULL,
+  `Nota` DECIMAL(3,1) NOT NULL,
+  INDEX `Disciplina_idx` (`Disciplina` ASC) VISIBLE,
+  INDEX `Aluno_idx` (`Aluno` ASC) VISIBLE,
+  CONSTRAINT `Aluno`
+    FOREIGN KEY (`Aluno`)
+    REFERENCES `Escola`.`Aluno` (`idAluno`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Disciplina`
+    FOREIGN KEY (`Disciplina`)
+    REFERENCES `Escola`.`Disciplina` (`idDisciplina`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
