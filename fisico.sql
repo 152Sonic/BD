@@ -15,14 +15,54 @@ CREATE SCHEMA IF NOT EXISTS `Escola` DEFAULT CHARACTER SET utf8 ;
 USE `Escola` ;
 
 -- -----------------------------------------------------
+-- Table `Escola`.`Docente`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `Escola`.`Docente` (
+  `idDocente` INT NOT NULL,
+  `nr_de_Contribuinte` VARCHAR(45) NOT NULL,
+  `nome` VARCHAR(45) NOT NULL,
+  `Escola` INT NULL,
+  PRIMARY KEY (`idDocente`),
+  INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
+  CONSTRAINT `Escola`
+    FOREIGN KEY (`Escola`)
+    REFERENCES `Escola`.`Escola` (`idEscola`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `Escola`.`Escola`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Escola`.`Escola` (
   `idEscola` INT NOT NULL,
   `Rua` VARCHAR(45) NULL,
-  `Codigo_Postal` INT NULL,
+  `Codigo_Postal` VARCHAR(45) NULL,
   `telemovel` INT NULL,
-  PRIMARY KEY (`idEscola`))
+  `Nome` VARCHAR(45) NOT NULL,
+  `Aluno` INT NULL,
+  `Turma` INT NULL,
+  `Docente` INT NULL,
+  PRIMARY KEY (`idEscola`),
+  INDEX `Aluno_idx` (`Aluno` ASC) VISIBLE,
+  INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
+  INDEX `Docente_idx` (`Docente` ASC) VISIBLE,
+  CONSTRAINT `Aluno`
+    FOREIGN KEY (`Aluno`)
+    REFERENCES `Escola`.`Aluno` (`idAluno`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Turma`
+    FOREIGN KEY (`Turma`)
+    REFERENCES `Escola`.`Turma` (`idTurma`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Docente`
+    FOREIGN KEY (`Docente`)
+    REFERENCES `Escola`.`Docente` (`idDocente`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -30,14 +70,21 @@ ENGINE = InnoDB;
 -- Table `Escola`.`Turma`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Escola`.`Turma` (
-  `N_Turma` INT NOT NULL,
+  `idTurma` INT NOT NULL,
   `N_Alunos` INT NOT NULL,
   `Diretor_de_Turma` VARCHAR(45) NOT NULL,
-  `Escola_idEscola` INT NOT NULL,
-  PRIMARY KEY (`N_Turma`, `Escola_idEscola`),
-  INDEX `fk_Turma_Escola1_idx` (`Escola_idEscola` ASC) VISIBLE,
-  CONSTRAINT `fk_Turma_Escola1`
-    FOREIGN KEY (`Escola_idEscola`)
+  `Aluno` INT NULL,
+  `Escola` INT NULL,
+  PRIMARY KEY (`idTurma`),
+  INDEX `Aluno_idx` (`Aluno` ASC) VISIBLE,
+  INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
+  CONSTRAINT `Aluno`
+    FOREIGN KEY (`Aluno`)
+    REFERENCES `Escola`.`Aluno` (`idAluno`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `Escola`
+    FOREIGN KEY (`Escola`)
     REFERENCES `Escola`.`Escola` (`idEscola`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -48,42 +95,23 @@ ENGINE = InnoDB;
 -- Table `Escola`.`Aluno`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Escola`.`Aluno` (
-  `nr_de_aluno` INT NOT NULL,
+  `idAluno` INT NOT NULL,
   `nome` VARCHAR(45) NOT NULL,
   `idade` INT NOT NULL,
   `media` DECIMAL(3,1) NULL,
   `email` VARCHAR(45) NULL,
-  `Escola_idEscola` INT NOT NULL,
-  `Turma_N_Turma` INT NOT NULL,
-  PRIMARY KEY (`nr_de_aluno`, `Escola_idEscola`, `Turma_N_Turma`),
-  INDEX `fk_Aluno_Escola_idx` (`Escola_idEscola` ASC) VISIBLE,
-  INDEX `fk_Aluno_Turma1_idx` (`Turma_N_Turma` ASC) VISIBLE,
-  CONSTRAINT `fk_Aluno_Escola`
-    FOREIGN KEY (`Escola_idEscola`)
-    REFERENCES `Escola`.`Escola` (`idEscola`)
+  `Turma` INT NULL,
+  `Escola` INT NULL,
+  PRIMARY KEY (`idAluno`),
+  INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
+  INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
+  CONSTRAINT `Turma`
+    FOREIGN KEY (`Turma`)
+    REFERENCES `Escola`.`Turma` (`idTurma`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Aluno_Turma1`
-    FOREIGN KEY (`Turma_N_Turma`)
-    REFERENCES `Escola`.`Turma` (`N_Turma`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `Escola`.`Docente`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Escola`.`Docente` (
-  `idDocente` INT NOT NULL,
-  `nr_de_Contribuinte` VARCHAR(45) NOT NULL,
-  `nome` VARCHAR(45) NOT NULL,
-  `ensina_Turma_N_de_turma` INT NOT NULL,
-  `Escola_idEscola` INT NOT NULL,
-  PRIMARY KEY (`idDocente`, `ensina_Turma_N_de_turma`, `Escola_idEscola`),
-  INDEX `fk_Docente_Escola1_idx` (`Escola_idEscola` ASC) VISIBLE,
-  CONSTRAINT `fk_Docente_Escola1`
-    FOREIGN KEY (`Escola_idEscola`)
+  CONSTRAINT `Escola`
+    FOREIGN KEY (`Escola`)
     REFERENCES `Escola`.`Escola` (`idEscola`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -91,25 +119,21 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Escola`.`ensina`
+-- Table `Escola`.`Ensina`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Escola`.`ensina` (
-  `Turma_N_Turma` INT NOT NULL,
-  `Turma_Escola_idEscola` INT NOT NULL,
-  `Docente_idDocente` INT NOT NULL,
-  `Docente_ensina_Turma_N_de_turma` INT NOT NULL,
-  `Docente_Escola_idEscola` INT NOT NULL,
-  PRIMARY KEY (`Turma_N_Turma`, `Turma_Escola_idEscola`, `Docente_idDocente`, `Docente_ensina_Turma_N_de_turma`, `Docente_Escola_idEscola`),
-  INDEX `fk_Turma_has_Docente_Docente1_idx` (`Docente_idDocente` ASC, `Docente_ensina_Turma_N_de_turma` ASC, `Docente_Escola_idEscola` ASC) VISIBLE,
-  INDEX `fk_Turma_has_Docente_Turma1_idx` (`Turma_N_Turma` ASC, `Turma_Escola_idEscola` ASC) VISIBLE,
-  CONSTRAINT `fk_Turma_has_Docente_Turma1`
-    FOREIGN KEY (`Turma_N_Turma` , `Turma_Escola_idEscola`)
-    REFERENCES `Escola`.`Turma` (`N_Turma` , `Escola_idEscola`)
+CREATE TABLE IF NOT EXISTS `Escola`.`Ensina` (
+  `Docente` INT NOT NULL,
+  `Turma` INT NOT NULL,
+  INDEX `Docente_idx` (`Docente` ASC) VISIBLE,
+  INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
+  CONSTRAINT `Docente`
+    FOREIGN KEY (`Docente`)
+    REFERENCES `Escola`.`Docente` (`idDocente`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_Turma_has_Docente_Docente1`
-    FOREIGN KEY (`Docente_idDocente` , `Docente_ensina_Turma_N_de_turma` , `Docente_Escola_idEscola`)
-    REFERENCES `Escola`.`Docente` (`idDocente` , `ensina_Turma_N_de_turma` , `Escola_idEscola`)
+  CONSTRAINT `Turma`
+    FOREIGN KEY (`Turma`)
+    REFERENCES `Escola`.`Turma` (`idTurma`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
