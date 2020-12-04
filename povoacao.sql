@@ -1,7 +1,73 @@
 USE Escola;
 
+INSERT INTO Escola
+	(idEscola, Rua, Codigo_Postal, telemovel)
+    VALUES
+		(1, "Rua Dona Adelaide", "4705-231", 294586312),
+        (2, "Rua 25 de Abril", "4750-301", 236541258),
+        (3, "Rua do Raio Braga","4905-082", 298456321)
+	;
+    
+INSERT INTO Docente
+	(idDocente,nr_de_Contribuinte,nome,EscolaD)
+    VALUES
+		(1,532467321,"Maria Quintas Barros",1),
+        (2,235890472,"Francisco Correia Franco",1),
+        (3,173902700,"Ana Teresa Gião Gomes",1),
+        (4,356287111,"Maria Beatriz Araujo Lacerda",2),
+        (5,801382566,"Luis Enes Sousa",2),
+        (6,290172543,"Luis Carlos Salazar Martins",2),
+        (7,310200111,"André Carvalho da Cunha Martins",3),
+        (8,128356011,"André Gonçalves Vieira",3),
+        (9,574123456,"João Figueiredo Peixe Santos",3)
+	;
+    
+INSERT INTO Turma
+	(idTurma,N_Alunos,Diretor_de_Turma,EscolaT)
+    VALUES
+		(1,7,1,1),
+        (2,6,2,1),
+        (3,7,3,1),
+        (4,6,4,2),
+        (5,7,5,2),
+        (6,7,6,2),
+        (7,8,7,3),
+        (8,8,9,3)
+	;
+
+
+INSERT INTO Ensina
+	(TurmaE,DocenteE)
+    VALUES
+		(1,1),
+        (1,5),
+        (1,9),
+        (2,2),
+        (2,4),
+        (2,1),
+        (3,3),
+        (3,5),
+        (3,6),
+        (4,4),
+        (4,7),
+        (4,8),
+        (5,5),
+        (5,9),
+        (5,1),
+        (6,6),
+        (6,2),
+        (6,3),
+        (7,7),
+        (7,4),
+        (7,5),
+        (8,9),
+        (8,3),
+        (8,5)
+	;
+        
+   
 INSERT INTO Aluno
-	(nr_de_aluno,nome,idade,email,idEscola,idTurma,media)
+	(idAluno,nome,idade,email,EscolaAl,Turma,media)
     VALUES
 		(3,"Marcelo Alexandre Matos Fonseca Lima",16,"marceloLima@aejc.com",1,1,9.5),
         (4,"Eduardo Semanas Oliveira Araújo",15,"eduHard4@aejc.com",2,4,11.0),
@@ -61,72 +127,8 @@ INSERT INTO Aluno
         (124,"Francisco Jose Alves Laço",16,"xicofontes@aejc.com",2,6,13.0)
 	;
     
-INSERT INTO Docente
-	(idDocente,nr_de_Contribuinte,nome,idEscola)
-    VALUES
-		(1,532467321,"Maria Quintas Barros",1),
-        (2,235890472,"Francisco Correia Franco",1),
-        (3,173902700,"Ana Teresa Gião Gomes",1),
-        (4,356287111,"Maria Beatriz Araujo Lacerda",2),
-        (5,801382566,"Luis Enes Sousa",2),
-        (6,290172543,"Luis Carlos Salazar Martins",2),
-        (7,310200111,"André Carvalho da Cunha Martins",3),
-        (8,128356011,"André Gonçalves Vieira",3),
-        (9,574123456,"João Figueiredo Peixe Santos",3)
-	;
 
 
-INSERT INTO Ensina
-	(idTurma,idDocente)
-    VALUES
-		(1,1),
-        (1,5),
-        (1,9),
-        (2,2),
-        (2,4),
-        (2,1),
-        (3,3),
-        (3,5),
-        (3,6),
-        (4,4),
-        (4,7),
-        (4,8),
-        (5,5),
-        (5,9),
-        (5,1),
-        (6,6),
-        (6,2),
-        (6,3),
-        (7,7),
-        (7,4),
-        (7,5),
-        (8,9),
-        (8,3),
-        (8,5)
-	;
-        
-INSERT INTO Turma
-	(idTurma,N_Alunos,ID_Diretor,IDEscola)
-    VALUES
-		(1,7,1,1),
-        (2,6,2,1),
-        (3,7,3,1),
-        (4,6,4,2),
-        (5,7,5,2),
-        (6,7,6,2),
-        (7,8,7,3),
-        (8,8,9,3)
-	;
-    
-INSERT INTO Escola
-	(idEscola, Rua, codPostal, Telemovel)
-    VALUES
-		(1, "Rua Dona Adelaide", "4705-231", 294586312),
-        (2, "Rua 25 de Abril", "4750-301", 236541258),
-        (3, "Rua do Raio Braga","4905-082", 298456321)
-	;
-    
-        
         
         
         
