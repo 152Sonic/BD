@@ -1,5 +1,5 @@
 -- MySQL Workbench Forward Engineering
-
+DROP SCHEMA ESCOLA;
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
@@ -33,11 +33,11 @@ CREATE TABLE IF NOT EXISTS `Escola`.`Turma` (
   `idTurma` INT NOT NULL,
   `N_Alunos` INT NOT NULL,
   `Diretor_de_Turma` VARCHAR(45) NOT NULL,
-  `Escola` INT NULL,
+  `EscolaT` INT NULL,
   PRIMARY KEY (`idTurma`),
-  INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
-  CONSTRAINT `Escola`
-    FOREIGN KEY (`Escola`)
+  INDEX `Escola_idx` (`EscolaT` ASC) VISIBLE,
+  CONSTRAINT `EscolaT`
+    FOREIGN KEY (`EscolaT`)
     REFERENCES `Escola`.`Escola` (`idEscola`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -53,17 +53,18 @@ CREATE TABLE IF NOT EXISTS `Escola`.`Aluno` (
   `idade` INT NOT NULL,
   `email` VARCHAR(45) NULL,
   `Turma` INT NULL,
-  `Escola` INT NULL,
+  `EscolaAl` INT NULL,
+  `media` FLOAT NOT NULL,
   PRIMARY KEY (`idAluno`),
-  INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
+  INDEX `Escola_idx` (`EscolaAl` ASC) VISIBLE,
   INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
   CONSTRAINT `Turma`
     FOREIGN KEY (`Turma`)
     REFERENCES `Escola`.`Turma` (`idTurma`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `Escola`
-    FOREIGN KEY (`Escola`)
+  CONSTRAINT `EscolaAl`
+    FOREIGN KEY (`EscolaAl`)
     REFERENCES `Escola`.`Escola` (`idEscola`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -77,11 +78,11 @@ CREATE TABLE IF NOT EXISTS `Escola`.`Docente` (
   `idDocente` INT NOT NULL,
   `nr_de_Contribuinte` VARCHAR(45) NOT NULL,
   `nome` VARCHAR(45) NOT NULL,
-  `Escola` INT NULL,
+  `EscolaD` INT NULL,
   PRIMARY KEY (`idDocente`),
-  INDEX `Escola_idx` (`Escola` ASC) VISIBLE,
-  CONSTRAINT `Escola`
-    FOREIGN KEY (`Escola`)
+  INDEX `Escola_idx` (`EscolaD` ASC) VISIBLE,
+  CONSTRAINT `EscolaD`
+    FOREIGN KEY (`EscolaD`)
     REFERENCES `Escola`.`Escola` (`idEscola`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
@@ -92,50 +93,18 @@ ENGINE = InnoDB;
 -- Table `Escola`.`Ensina`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Escola`.`Ensina` (
-  `Turma` INT NOT NULL,
-  `Docente` INT NOT NULL,
-  INDEX `Docente_idx` (`Docente` ASC) VISIBLE,
-  INDEX `Turma_idx` (`Turma` ASC) VISIBLE,
-  CONSTRAINT `Turma`
-    FOREIGN KEY (`Turma`)
+  `TurmaE` INT NOT NULL,
+  `DocenteE` INT NOT NULL,
+  INDEX `Docente_idx` (`DocenteE` ASC) VISIBLE,
+  INDEX `Turma_idx` (`TurmaE` ASC) VISIBLE,
+  CONSTRAINT `TurmaE`
+    FOREIGN KEY (`TurmaE`)
     REFERENCES `Escola`.`Turma` (`idTurma`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `Docente`
-    FOREIGN KEY (`Docente`)
+  CONSTRAINT `DocenteE`
+    FOREIGN KEY (`DocenteE`)
     REFERENCES `Escola`.`Docente` (`idDocente`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `Escola`.`Disciplina`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Escola`.`Disciplina` (
-  `idDisciplina` INT NOT NULL,
-  `Nome` VARCHAR(45) NOT NULL,
-  PRIMARY KEY (`idDisciplina`))
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `Escola`.`Aprende`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Escola`.`Aprende` (
-  `Disciplina` INT NOT NULL,
-  `Aluno` INT NOT NULL,
-  `Nota` DECIMAL(3,1) NOT NULL,
-  INDEX `Disciplina_idx` (`Disciplina` ASC) VISIBLE,
-  INDEX `Aluno_idx` (`Aluno` ASC) VISIBLE,
-  CONSTRAINT `Aluno`
-    FOREIGN KEY (`Aluno`)
-    REFERENCES `Escola`.`Aluno` (`idAluno`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `Disciplina`
-    FOREIGN KEY (`Disciplina`)
-    REFERENCES `Escola`.`Disciplina` (`idDisciplina`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
