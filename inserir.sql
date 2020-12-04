@@ -1,6 +1,5 @@
 USE Escola;
 
-
 -- Insere novo docente
 
 DROP PROCEDURE IF EXISTS inserirDocente;
@@ -50,7 +49,7 @@ DELIMITER $$
 CREATE PROCEDURE removerAluno (IN id INT)
 BEGIN
 update Aluno as A, Turma set N_Alunos = N_Alunos - 1 where A.idAluno = id and idTurma = A.Turma;
-delete from Aluno as A where idAluno = id;
+delete from Aluno where idAluno = id;
 END$$
 DELIMITER ;
 
@@ -70,10 +69,71 @@ delimiter ;
 call inserirTurma(9,0,3,2);
 
 
---  drop procedure if exists alterarMedia;
 
--- delimiter $$
--- create procedure alterar
+-- Alterar media de um aluno
+
+drop procedure if exists alterarMedia;
+
+delimiter $$
+create procedure alterarMedia(in id int,in m float)
+begin
+update Aluno set media = m where idAluno = id;
+end $$
+delimiter ;
+
+call alterarMedia(3,18.0);
+
+-- Alterar turma de um aluno
+drop procedure if exists alterarTurmaA;
+
+delimiter $$
+create procedure alterarTurmaA(in id int,in t  int)
+begin
+update Aluno set Turma = t where idAluno = id;
+end $$
+delimiter ;
+
+call alterarTurmaA(3,5);
+
+-- Alterar escola de um aluno
+
+drop procedure if exists alterarEscolaA;
+
+delimiter $$
+create procedure alterarEscolaA(in id int,in e  int)
+begin
+update Aluno set EscolaAl = e where idAluno = id;
+end $$
+delimiter ;
+
+call alterarEscolaA(3,2);
+
+-- Alterar escola de um docente
+
+drop procedure if exists alterarEscolaD;
+
+delimiter $$
+create procedure alterarEscolaD(in id int,in e  int)
+begin
+update Docente set EscolaD = e where idDocente = id;
+end $$
+delimiter ;
+
+call alterarEscolaD(6,2);
+
+-- Alterar turma de um docente
+
+drop procedure if exists alterarTurmaD;
+
+delimiter $$
+create procedure alterarTurmaD(in id int,in t  int)
+begin
+update Ensina set TurmaE = t where DocenteE = id;
+end $$
+delimiter ;
+
+call alterarTurmaD(2,5);
+
 
 select * from Docente;
 
