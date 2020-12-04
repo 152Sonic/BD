@@ -39,7 +39,7 @@ update Turma set N_Alunos = N_Alunos + 1 where idTurma = turma;
 END$$
 DELIMITER ;
 
-CALL inserirAluno(183,"Francisco Alves Andrade",15,"faA@aejc.com",3,2,0.0);
+CALL inserirAluno(183,"Francisco Alves Andrade",15,null,1,1,0.0);
 
 -- Remove novo Aluno
 
@@ -51,6 +51,7 @@ BEGIN
 update Aluno as A, Turma set N_Alunos = N_Alunos - 1 where A.idAluno = id and idTurma = A.Turma;
 delete from Aluno where idAluno = id;
 END$$
+
 DELIMITER ;
 
 CALL removerAluno(183);

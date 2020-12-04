@@ -32,7 +32,7 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `Escola`.`Turma` (
   `idTurma` INT NOT NULL,
   `N_Alunos` INT NOT NULL,
-  `Diretor_de_Turma` VARCHAR(45) NOT NULL,
+  `Diretor_de_Turma` INT NOT NULL,
   `EscolaT` INT NULL,
   PRIMARY KEY (`idTurma`),
   INDEX `Escola_idx` (`EscolaT` ASC) VISIBLE,
@@ -76,7 +76,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Escola`.`Docente` (
   `idDocente` INT NOT NULL,
-  `nr_de_Contribuinte` VARCHAR(45) NOT NULL,
+  `nr_de_Contribuinte` INT NOT NULL,
   `nome` VARCHAR(45) NOT NULL,
   `EscolaD` INT NULL,
   PRIMARY KEY (`idDocente`),

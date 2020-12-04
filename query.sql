@@ -42,6 +42,7 @@ CALL nTDocentesEscola(1);
 DROP PROCEDURE IF EXISTS nTTurmaEscola;
 
 DELIMITER $$
+
 CREATE PROCEDURE nTTurmaEscola(IN idE INT)
 BEGIN
 select count(T.idTurma) as total from Turma T
@@ -53,7 +54,7 @@ CALL nTTurmaEscola(1);
 
 -- 7. Quais dos docentes são diretores de turma.
 select D.idDocente, D.nome from Docente AS D, Turma AS T 
-where T.Diretor_de_Turma = D.idDocente;
+where T.Diretor_de_Turma = D.nome;
 
 -- 8. Saber a média de um determinado aluno.
 
@@ -84,11 +85,13 @@ DELIMITER ;
 
 
 CALL mediaTurma(1);
+
 -- 10.	Saber a média de uma escola
 
 DROP PROCEDURE IF EXISTS mediaEscola;
 
 DELIMITER $$
+
 CREATE PROCEDURE mediaEscola(IN idEscola INT)
 BEGIN
 select (sum(A.media)/count(A.idAluno)) from Escola AS E
@@ -96,24 +99,88 @@ inner join Aluno AS A ON A.EscolaAl = E.idEscola
 where E.idEscola = idEscola 
 group by A.EscolaAl;
 END $$
+
 DELIMITER ;
 
 CALL mediaEscola(1);
 
--- 11. Saber os nomes e número de aluno dos alunos de uma determinada turma = 1.
-select A.idAluno, A.nome from Aluno AS A
-where A.Turma = 1;
+-- 11.	Saber a média por escola 
 
--- 12. Saber o nome e número de aluno dos alunos que frequentam determinada escola.
-select A.idAluno, A.nome from Aluno AS A
-where A.EscolaAl = 1;
+select (sum(A.media)/count(A.idAluno)) from Escola AS E
+inner join Aluno AS A ON A.EscolaAl = E.idEscola
+group by A.EscolaAl;
 
--- 13. Identificar o top 3 dos melhores alunos da escola 1.
-select A.media, A.nome from Aluno AS A where EscolaAl = 1
-order by media desc 
-Limit 3;
 
--- 14. Dado um aluno obter todos os docentes dele
+-- 12. Saber os nomes e número de aluno dos alunos de uma determinada turma.
+delimiter $$
 
-drop 
+create procedure alunosTurma(in idT int)
+begin
+	select A.idAluno, A.nome from Aluno AS A
+	where A.Turma = idT;
+end$$
+
+delimiter ;
+
+call alunosTurma(2);
+
+-- 13. Saber o nome e número de aluno dos alunos que frequentam determinada escola.
+delimiter $$
+create procedure alunosEscola(in idE int)
+begin
+	select A.idAluno, A.nome from Aluno AS A
+	where A.EscolaAl = idE;
+end$$
+
+delimiter ;    
+
+call alunosEscola(1);
+
+-- 14. Identificar o top 3 dos melhores alunos de uma escola.
+
+delimiter $$
+
+create procedure topAlunos(in idE int)
+begin
+	select A.media, A.nome from Aluno AS A where EscolaAl = idE
+	order by media desc 
+	Limit 3;
+end $$
+
+delimiter ;
+
+call topAlunos(3);
+
+
+-- 15. Dado um aluno obter todos os docentes dele
+
+DROP PROCEDURE IF EXISTS docentes_al;
+
+DELIMITER $$
+CREATE PROCEDURE docentes_al(IN id_al INT)
+BEGIN
+select D.idDocente, D.nome from Aluno as A
+inner join ensina as en on en.TurmaE = A.Turma
+inner join Docente as D on D.idDocente = en.DocenteE
+where A.idAluno = id_al;
+END $$
+DELIMITER ;
+
+CALL docentes_al(3);
+
+-- 16. Dado um docente obter todos os alunos dele
+
+DROP PROCEDURE IF EXISTS alunos_doc;
+
+DELIMITER $$
+CREATE PROCEDURE alunos_doc(IN id_doc INT)
+BEGIN
+select A.idAluno, A.nome from Docente as D
+inner join ensina as en on en.DocenteE = D.idDocente
+inner join Aluno as A on A.Turma = en.TurmaE
+where D.idDocente = id_doc;
+END $$
+DELIMITER ;
+
+CALL alunos_doc(1);
 
